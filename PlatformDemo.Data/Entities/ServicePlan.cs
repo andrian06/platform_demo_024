@@ -5,7 +5,7 @@
     /// </summary>
     public class ServicePlan
     {
-        public int ServicePlanId { get; set; }
+        public int Id { get; set; }
         public DateTime DateOfPurchase { get; set; }
         public ICollection<Timesheet> Timesheets { get; set; }
     }

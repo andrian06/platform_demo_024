@@ -1,0 +1,12 @@
+﻿@model IEnumerable<PlatformDemo.Data.Entities.Timesheet>
+
+<ul>
+    @foreach (var timesheet in Model)
+    {
+        <li>
+            <strong>Start:</strong> @timesheet.StartDateTime <br />
+            <strong>End:</strong> @timesheet.EndDateTime <br />
+            <strong>Description:</strong> @timesheet.Description
+        </li>
+    }
+</ul>

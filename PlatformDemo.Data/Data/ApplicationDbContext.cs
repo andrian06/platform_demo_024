@@ -14,35 +14,49 @@ namespace PlatformDemo.Data
         // DbSet for Timesheet entity
         public DbSet<Timesheet> Timesheets { get; set; }
 
-        // Configuring LocalDB as the database provider
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=PlatformDemoDb;Trusted_Connection=True;");
-            }
         }
+       
 
         // Seeding data to the database on initial creation
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Seed initial service plans
-            modelBuilder.Entity<ServicePlan>().HasData(
-                new ServicePlan { ServicePlanId = 1, DateOfPurchase = DateTime.Now.AddDays(-30) },
-                new ServicePlan { ServicePlanId = 2, DateOfPurchase = DateTime.Now.AddDays(-25) },
-                new ServicePlan { ServicePlanId = 3, DateOfPurchase = DateTime.Now.AddDays(-20) },
-                new ServicePlan { ServicePlanId = 4, DateOfPurchase = DateTime.Now.AddDays(-15) }
-            );
+            base.OnModelCreating(modelBuilder);
 
-            // Seed initial timesheets
-            modelBuilder.Entity<Timesheet>().HasData(
-                new Timesheet { TimesheetId = 1, ServicePlanId = 1, StartDateTime = DateTime.Now.AddDays(-10), EndDateTime = DateTime.Now.AddDays(-9), Description = "Initial Setup" },
-                new Timesheet { TimesheetId = 2, ServicePlanId = 1, StartDateTime = DateTime.Now.AddDays(-9), EndDateTime = DateTime.Now.AddDays(-8), Description = "Configuration" },
-                new Timesheet { TimesheetId = 3, ServicePlanId = 2, StartDateTime = DateTime.Now.AddDays(-8), EndDateTime = DateTime.Now.AddDays(-7), Description = "Update" },
-                // Additional timesheet entries
-                new Timesheet { TimesheetId = 4, ServicePlanId = 2, StartDateTime = DateTime.Now.AddDays(-7), EndDateTime = DateTime.Now.AddDays(-6), Description = "Bug Fix" },
-                new Timesheet { TimesheetId = 5, ServicePlanId = 3, StartDateTime = DateTime.Now.AddDays(-6), EndDateTime = DateTime.Now.AddDays(-5), Description = "Testing" }
-            );
+            // Seeding ServicePlans
+            var servicePlans = new List<ServicePlan>
+    {
+        new ServicePlan { Id = 1, DateOfPurchase = new DateTime(2023, 1, 15) },
+        new ServicePlan { Id = 2, DateOfPurchase = new DateTime(2023, 2, 10) },
+        new ServicePlan { Id = 3, DateOfPurchase = new DateTime(2023, 3, 20) },
+        new ServicePlan { Id = 4, DateOfPurchase = new DateTime(2023, 4, 5) },
+        new ServicePlan { Id = 5, DateOfPurchase = new DateTime(2023, 4, 25) }
+    };
+
+            modelBuilder.Entity<ServicePlan>().HasData(servicePlans);
+
+            // Seeding Timesheets with Foreign Key
+            var timesheets = new List<Timesheet>
+    {
+        // Timesheets for ServicePlan 1
+        new Timesheet { Id = 1, ServicePlanId = 1, StartDateTime = new DateTime(2023, 1, 16, 9, 0, 0), EndDateTime = new DateTime(2023, 1, 16, 17, 0, 0), Description = "Initial consultation" },
+        new Timesheet { Id = 2, ServicePlanId = 1, StartDateTime = new DateTime(2023, 1, 17, 10, 0, 0), EndDateTime = new DateTime(2023, 1, 17, 18, 0, 0), Description = "Project kickoff" },
+
+        // Timesheets for ServicePlan 2
+        new Timesheet { Id = 3, ServicePlanId = 2, StartDateTime = new DateTime(2023, 2, 11, 9, 30, 0), EndDateTime = new DateTime(2023, 2, 11, 16, 30, 0), Description = "Requirements gathering" },
+        new Timesheet { Id = 4, ServicePlanId = 2, StartDateTime = new DateTime(2023, 2, 12, 10, 0, 0), EndDateTime = new DateTime(2023, 2, 12, 18, 0, 0), Description = "Design discussion" },
+
+        // Timesheets for ServicePlan 3
+        new Timesheet { Id = 5, ServicePlanId = 3, StartDateTime = new DateTime(2023, 3, 21, 9, 0, 0), EndDateTime = new DateTime(2023, 3, 21, 17, 0, 0), Description = "Development sprint" },
+        new Timesheet { Id = 6, ServicePlanId = 3, StartDateTime = new DateTime(2023, 3, 22, 10, 0, 0), EndDateTime = new DateTime(2023, 3, 22, 18, 0, 0), Description = "Code review" },
+
+        // ServicePlan 4 has no Timesheets
+        // ServicePlan 5 has no Timesheets
+    };
+
+            modelBuilder.Entity<Timesheet>().HasData(timesheets);
         }
     }
 }

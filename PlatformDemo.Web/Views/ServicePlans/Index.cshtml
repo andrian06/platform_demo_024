@@ -1,0 +1,71 @@
+﻿@model PlatformDemo.Data.ViewModels.ServicePlanViewModel
+
+<h1>Service Plans</h1>
+
+<form method="get" class="mb-3">
+	<input type="text" name="searchTerm" value="@Model.SearchTerm" placeholder="Search by Date" />
+	<select name="sortOrder">
+		<option value="">Sort by Date Ascending</option>
+		<option value="date_desc">Sort by Date Descending</option>
+		<option value="timesheets">Sort by Timesheets Ascending</option>
+		<option value="timesheets_desc">Sort by Timesheets Descending</option>
+	</select>
+	<button type="submit">Search</button>
+</form>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Service Plan ID</th>
+			<th>Date of Purchase</th>
+			<th>Number of Timesheets</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var servicePlan in Model.ServicePlans)
+		{
+			<tr>
+				<td>@servicePlan.Id</td>
+				<td>@servicePlan.DateOfPurchase.ToString("dd/MM/yyyy")</td>
+				<td>
+					<a href="#" class="view-timesheets" data-serviceplan-id="@servicePlan.Id" data-toggle="modal" data-target="#timesheetModal">
+						@servicePlan.Timesheets.Count
+					</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<nav>
+	<ul class="pagination">
+		@for (int i = 1; i <= Math.Ceiling((double)Model.TotalCount / Model.PageSize); i++)
+		{
+			<li class="page-item @(Model.PageNumber == i ? "active" : "")">
+				<a class="page-link" href="?pageNumber=@i&searchTerm=@Model.SearchTerm&sortOrder=@Model.SortOrder">@i</a>
+			</li>
+		}
+	</ul>
+</nav>
+<!-- Timesheet Modal -->
+<div class="modal fade" id="timesheetModal" tabindex="-1" role="dialog" aria-labelledby="timesheetModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="timesheetModalLabel">Timesheet Details</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<!-- Timesheet details will go here -->
+				<div id="timesheetDetails"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+</div>
