@@ -1,4 +1,4 @@
-```markdown
+
 # PlatformDemo
 
 ## TEST TASK TO COMPLETE
@@ -34,9 +34,10 @@ PlatformDemo is a .NET 8 application designed to manage service plans and associ
 
 To set up the project, follow these steps:
 
-1. Clone the repository:
+1. Clone the repository: 
+
    ```bash
-   git clone https://github.com/andrian06/platform_demo_024.git
+      cd PlatformDemo.Web
    ```
 
 2. Navigate into the project directory:
@@ -119,5 +120,5 @@ Here’s a snippet from the `ServicePlansController` demonstrating the search and 
 		return View(viewModel); 
 	}
 
-```
+
  
